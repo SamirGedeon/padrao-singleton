@@ -1,0 +1,38 @@
+classDiagram
+direction LR
+class ConfiguracaoEstufa {
+    <<Singleton>>
+    -ConfiguracaoEstufa instance$
+    -long serialVersionUID$
+    -double temperaturaMinima
+    -double temperaturaMaxima
+    -double umidadeMinima
+    -double umidadeMaxima
+    -ConfiguracaoEstufa()
+    +getInstance() ConfiguracaoEstufa$
+    +configurarLimites(double tMin, double tMax, double uMin, double uMax) void
+    +avaliarCondicoes(double temperatura, double umidade) String
+    -validarFaixa(double minimo, double maximo, String nome) void$
+    +clone() Object
+    -readResolve() Object
+}
+class Serializable {
+    <<interface>>
+}
+class PainelOperador {
+    +getConfiguracao() ConfiguracaoEstufa
+    +aplicarPerfilMudas() void
+}
+class ControladorClima {
+    +getConfiguracao() ConfiguracaoEstufa
+    +processarLeitura(double temperatura, double umidade) String
+}
+class Main {
+    -Main()
+    +main(String[] args) void$
+}
+Serializable <|.. ConfiguracaoEstufa
+PainelOperador ..> ConfiguracaoEstufa : configura limites
+ControladorClima ..> ConfiguracaoEstufa : avalia sensores
+Main ..> PainelOperador : utiliza
+Main ..> ControladorClima : utiliza
